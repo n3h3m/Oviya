@@ -1,137 +1,157 @@
 # Oviya Programming Language
 
-**A dynamic, interpreted programming language with natural syntax and reactive programming features**
+A programming language designed for expressive and intuitive programming. With its unique blend of mathematical notation, reactive programming, and English-like syntax, Oviya aims to make code more readable and maintainable while providing powerful features for both beginners and advanced developers .
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Language Features](#language-features)
-- [Syntax Reference](#syntax-reference)
-- [Data Types](#data-types)
-- [Functions](#functions)
-- [Control Flow](#control-flow)
-- [Collections](#collections)
-- [Time and Dates](#time-and-dates)
-- [Method Chaining](#method-chaining)
-- [Reactive Programming](#reactive-programming)
-- [Background Processing](#background-processing)
-- [Advanced Features](#advanced-features)
-- [Examples](#examples)
+## Philosophy
 
-## Overview
+Oviya is designed to be expressive like English, compact like math, and reactive like modern UI frameworks. It prioritizes:
 
-Oviya is a modern, dynamic programming language designed for simplicity and expressiveness[1][2]. It combines familiar programming concepts with innovative features like reactive assignments, natural language operators, and powerful method chaining capabilities[3][4]. The language is currently interpreted and implemented in Go, with plans for compilation in future versions[1].
+- Readability over verbosity
+- Expressiveness over boilerplate
+- Reactive programming as a first-class citizen
+- A syntax that matches how humans think, not just how machines run
 
-### Key Features
+## Features
 
-- **Dynamic typing** with intuitive type inference
-- **Natural language syntax** supporting English-like expressions
-- **Reactive programming** with automatic variable updates
-- **Method chaining** with pipeline operators
-- **Background processing** with simple async syntax
-- **Comprehensive time handling** with built-in temporal operations
-- **Flexible control structures** as first-class objects
+### Core Language Features 
 
-## Installation
+- **Dynamic Typing**: Variables can hold any type of value and be reassigned freely
+- **Compiled language**: Compiles to C and the compiler was built on Go for performance and reliability
+- **Mathematical Notation**: Natural mathematical expressions like `2x + y`
+- **Method Chaining**: Elegant data processing with the `->` operator
+- **Reactive Programming**: `when` statements for event-driven programming
+- **Parallel Processing**: Background execution with `~` operator
+- **English-like Syntax**: Readable conditions using words like `is`, `above`, `between`
 
-### Prerequisites
+### Advanced Features 
 
-- Go 1.19 or higher
-- Git
-
-### Building from Source
-
-```bash
-git clone https://github.com/n3h3m/oviya.git
-cd oviya
-go build -o oviya cmd/main.go
-```
-
-### Running Oviya
-
-```bash
-# Run a file
-./oviya script.ov
-
-# Interactive mode
-./oviya
-```
+- **First-class Control Flow**: Assign `if`, `while`, `for` statements to variables
+- **Complex Numbers**: Built-in support for complex numbers and quaternions
+- **Time Arithmetic**: Natural time expressions like `3days from now`
+- **String Interpolation**: Variable substitution in double-quoted strings
+- **Array Operations**: Advanced slicing with `L:start:end:step:filter:map`
+- **Autovivification**: Automatic creation of nested data structures
+- **Closures & Decorators**: Functional programming capabilities
 
 ## Quick Start
 
-Create your first Oviya program:
+Create your first Oviya program in a file named `hello.ov`:
 
 ```oviya
-// hello.ov
-print "Hello, World!"
+// Basic printing
+print "Hello, Oviya!"
 
-// Variables and basic operations
-name = "Oviya"
-version = 1.0
-print "Welcome to {name} v{version}"
+// Variables and arithmetic
+x = 10
+y = 5
+result = 2x + y  // Natural mathematical notation
+print "Result: {result}"
 
 // Function definition
-greet(name) = "Hello, {name}!"
-print greet("Developer")
+square(n) = n^2
+print "Square of 7: {square(7)}"
+
+// Method chaining
+data = "  apple, banana, cherry  "
+cleaned = data -> split(",") -> map(trim)
+print cleaned  // ["apple", "banana", "cherry"]
 ```
 
-Run it:
-```bash
-./oviya hello.ov
-```
+## Language Syntax
 
-## Language Features
+### Comments 
 
-### File Extension
-Oviya source files use the `.ov` extension[5].
-
-### Comments
 ```oviya
 // Single line comment
 
 ///
-Multi-line
-comment block
+Multi-line 
+comments
 ///
 ```
 
-### Print Statement
-```oviya
-print "Hello, World!"
-print "Value: {variable}"  // String interpolation
+### Literals
+```
+// Below are valid literals
+t = 6pm // time literal
+d = 27jun // date literal
+
 ```
 
-## Syntax Reference
+### Function Literals
+```
+// Expressions like `+2`, `-2`, `/5`, `^2`, `*10`, `%=3`
+// are treated as **anonymous functions** or **function literals**.
+//
+// These can be assigned to variables and used like regular functions.
+// The `$` symbol is implicitly used as the argument.
+//
+// For example:
+square = ^2        // same as: func(x) = x^2
+double = *2         
+half = /2          
+add3 = +3           
+mod5 = %5           
 
-### Variable Declarations
+// They can be used in map, filter, reduce, etc.
+nums = [1, 2, 3, 4, 5]
+squares = nums.map(square)        // [1, 4, 9, 16, 25]
+doubled = double nums        // [2, 4, 6, 8, 10]
+doubled = nums -> double
+even = nums.filter(%2 = 0)    // [2, 4]
+
+// You can also assign and call them directly
+f = -1
+print f(10)    // 9
+```
+
+### Default arguement
+```
+// $ is usually considered as default arguement
+// Upon receiving multiple arguments $ becomes the list of arguments
+// In that scenario, Use `$1`, `$2`, `$3`, etc. for positional arguments in anonymous functions.
+//
+// Examples:
+add = $1 + $2         // same as: func(a, b): return a + b
+power = $1 ^ $2       // same as: func(base, exp): return base ^ exp
+max = $1 > $2 : $1 : $2 // ternary operator cond:true_value:false_value
+
+print add(3, 5)       // 8
+print power(2, 3)     // 8
+print max(10, 20)     // 20
+```
+
+### Variable Assignment 
 
 ```oviya
-// Basic assignment
+// Basic assignments
 x = 5
-y = 7
 name = "Alice"
-
-// Variables can be reassigned
-y = 10
+active = true
 
 // Constants (cannot be reassigned)
 const PI = 3.14159
-const MAX_SIZE = 1,000,000  // Commas allowed in numeric literals
+const MAX_USERS = 1000
+
+// Numeric literals with commas
+const POPULATION = 7,800,000,000
+
+// Mathematical expressions
+z = 10x + y    // Multiplication without explicit operator
+const tau = 2pi // Using pi constant
 ```
 
-### Operators
+## Data Types
 
-#### Arithmetic Operators
-```oviya
-a = x + y      // Addition
-b = a - x      // Subtraction
-c = x * y      // Multiplication
-d = x / y      // Division
+Oviya supports a rich set of built-in data types:
 
-// Implicit multiplication
-z = 10x + y    // Equivalent to z = 10 * x + y
-const tau = 2pi  // Equivalent to tau = 2 * pi
-```
+    `null`, `bool`, `str`,
+    `int`,  `ratio`, `real`, `complex`, `quat` ,
+    `ts`, // timestamp
+    `list`, `set`, `dict` ,
+    `inter`, `seq`, `func`, // interval, sequence (generators)
+    `url`, `email`, `err`
+
 
 #### Comparison Operators
 ```oviya
@@ -153,235 +173,531 @@ print b !! 10       // prints true (alternative equality)
 print a!5          // prints false (inequality shorthand)
 ```
 
-## Data Types
 
-Oviya supports the following built-in types:
-
-- `null` - Represents absence of value
-- `bool` - Boolean true/false
-- `int` - Integer numbers
-- `float` - Floating-point numbers
-- `timestamp` - Date and time values
-- `string` - Text data
-- `list` - Ordered collections
-- `set` - Unique, ordered collections
-- `map` - Key-value pairs
-
-### Type Examples
+### Collection Examples 
 
 ```oviya
-// Basic types
-nothing = null
-flag = true
-count = 42
-price = 19.99
-text = "Hello"
+// Lists (1-indexed)
+numbers = [1, 2, 3, 4, 5]
+print numbers[1]  // Prints: 1
 
-// Complex types
-numbers = [1, 2, 3, 4]
-unique_items = {1, 2, 3}
-dictionary = {1: "one", 2: "two", 3: "three"}
+// Mixed-type arrays
+mixed = [null, true, 42, "hello", [1,2], {a: 1}]
 
-// Mixed-type collections
-mixed_list = [null, true, 1, 4.5, [1, 2], {1, 2, 3}, {"key": "value"}]
+// Sets (ordered, unique values)
+unique_nums = {1, 2, 3, 2, 1}  // {1, 2, 3}
+
+// Maps (ordered key-value pairs)
+person = {
+    name: "John",
+    age: 30,
+    city: "New York"
+}
+person["occupation"] = "Developer"
+```
+
+### Complex Numbers and Quaternions 
+
+```oviya
+// Complex numbers
+z1 = 2 + 3i
+z2 = 1 - 4i
+result = z1 * z2
+
+// Quaternions
+q = 1 + 2i + 3j + 4k
+print q.r  // Real part: 1
+print q.i  // i component: 2
+print q.j  // j component: 3  
+print q.k  // k component: 4
+
+// Alternative notation when i,j,k are already taken ariables
+z = 2 + 3i_
+q = 1 + 2i_ + 3j_ + 4k_
 ```
 
 ## Functions
 
-### Function Declaration
+### Function Declaration 
 
 ```oviya
-// Standard function
-func calculate_area(length, width):
-    return length * width
+// Below ways to define functions
 
-// Shorthand function
-area(length, width) = length * width
+func f(n)
+    print x
 
-// Conditional function
-fib(n) = 0 if n (temp) = temp is between 35 and 45
-(comment) = comment contains "TODO"
+twice() = 2$ //$ stands for default arguement
+
+twice(x) = 2x // Also valid
+
+fib(n) = 0 if n < 1
+         1 if n = 1
+         fib(n-2) + fib(n+1)
+         
+fib(n) = 0 if n < 1 1 if n = 1 fib(n-2) + fib(n+1) // Also valid    
 ```
 
-### Function Calling
+### Function Calls 
 
 ```oviya
-// Standard calls
-result1 = area(10, 5)
-result2 = calculate_area(10, 5)
+// Three ways to calls functions
+f(x)
+f x
+x -> f
 
-// Space-separated calls (syntactic sugar)
-result3 = area 10, 5
-result4 = fib 8
+// Traditional syntax
+result1 = square(5)
+result2 = fibonacci(10)
 
-// Natural language function calls
-if temperature is very_high:
-    print "Too hot!"
+// Space-based calling (parentheses optional)
+result3 = twice 5
+result4 = fibonacci 10
 
-if comment needs_review:
-    print "Action required"
+// Multiple arguments
+func add(a, b, c)
+    return a + b + c
+
+sum1 = add(1, 2, 3)
+sum2 = add 1, 2, 3  // Same as above
+sum2 = 1,2,3 -> sum // Also valid
+```
+
+### Typing
+```
+// Oviya allows struct which contains a declaration as below
+// struct name must follow CamelCase while other variables must follow snake_case
+// _ in struct name is not allowed, and uppercase in variable names are not allowed
+// UPPER_CASE in variable name is allowed if all of them are upper case
+// Variable names cannot start with or end with digits
+
+// Struct defining syntax
+
+struct StructName
+    type field_name  validator_function
+    
+// Below are common validator functions, often times the type itself is a function, in generall in Oviya everything is functions in fact every single tokens are functions
+// Enum: {'ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'}
+// Less than or greater than, or between
+
+// Struct Example
+struct Address
+    str street
+    str city
+    str state  {'ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'},
+    int zip len = 4
+
+struct Hotel    
+    str name    len < 100
+    int price   %50   
+    email email
+    url web
+    Address address
+    real rating 1<=$<=5
+    
+    
+// Type will be enfored at the run time, also will be checked by static code analysers as well
+// The below object will be failed to instantiated since Texas is not a valid austrlian state
+hotel = Hotel {
+    name: "Park Shereton",
+    price: 270,
+    email: "contact@shereton.com",
+    web: "www.shereton.com",
+    address: {
+        street: "128 George St",
+        city: "Sydney",
+        state: "TX",
+        zip: 2000
+    }
+}
+// Output
+// address.state is failing to be enum of {'ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'}
+
+
+Here are some example values
+x = 10             // int
+name = "James"     // str
+x = 1/3            // ratio
+
+
+z = 2 + 3i         // complex
+q = 4 + 4i + 3j + 7k // quaternion
+
+// For complex and quaternions the variables i,j,k can be used, however Oviya allows redeclaring i,j as variables.
+In Those circumstances you can declare them above as below
+
+z = 2 + 3i_         // complex
+q = 4 + 4i_ + 3j_ + 7k_ // quaternion
+
+You can access them as usual
+q.k // returns 3
+q.r // would return 4
+
+// Interval takes in this format
+// start..end function
+// If end is missing it's considered unbounded
+// Function can be any function or a function literal
+// In all practicality intervals and se
+
+
+group_a = 1..10  // intergers    from 1 to 10
+group_b = 1..100 +2
+N = 1.. // natual numbers
+
+odds = 1.. +2 // Set of odd numbers to infinity
+odds = 1..100 +2 // Odd numbers under 100
+
+squares = 1.. ^2 // infinite sequence of squares  1, 4, 9, 16...
+
+// An interval is just a list with 2 items where the left one is less than right one
+// interval can be any type of values, as longs as the values are comparable
+bound = 1.2,,2.8
+lunch = 1200,,1300
+
+// For all purposes, intervals and sequnces can be iterated as lists, but can't be mutated as it would make the sqeunce rule controdictory
+
+By design Oviya is a dynamically typed language, different types of variables can be assgined reassgined with different types of values.
+
+However, for functions Oviya allows type hinting and those types are indeed enforced at runtime
+x = 10
+x = 'hello' // valid
+
+int f(int x) = 2x // Optional hints, But they get enforced at runtime
+
+// Partial type hinting is allowed
+f(int a, b, str c)  // b has no type check, only `a` and `c` are enforced
+    return "lorem ipsum" // return value not enforced
+
+
+// Type casting works just like a function call
+s = str 123    // s = "123"
+n = int "456" // n = 456
+r = ratio 0.75 // r = 3/4
+
+// Treat types as functions
+age_str = str(25)       // "25"
+age_str = str 25        // "25"
+age_str = 25 -> str     // "25"
+
+```
+
+
+### Type Hints 
+
+```oviya
+// Function with type hints (enforced at runtime)
+int multiply(int a, int b) = a * b
+
+// Partial type hinting
+func process(int count, data, str format)
+    // Only 'count' and 'format' are type-checked
+    return format_data(data, count, format)
+
+// Type casting
+age_str = str 25        // "25"
+age_num = int "25"      // 25
+fraction = ratio 0.75   // 3/4
+
+// Treat types as functions
+age_str = str(25)       // "25"
+age_str = str 25        // "25"
+age_str = 25 -> str     // "25"
+
 ```
 
 ## Control Flow
 
-### Conditional Statements
+### Conditional Statements 
 
 ```oviya
-// Basic if statement
-if temperature > 30:
-    print "It's hot!"
+// Traditional if-else
+age = 18
+if age >= 18
+    print "Adult"
+else
+    print "Minor"
 
-// Natural language conditions
-if temperature is above 30 and humidity is below 60:
-    print "Perfect weather"
+// English-like conditions
+// `is` `are` keyword often doesn't carry much meaning, just a place holder to make code like natural language
+temperature = 75
+if temperature is above 70 and time is after 6pm
+    print "Perfect evening weather"
+    
+// The above is actually the below implementation 
+temperature = 75
+if temperature > 70 & time > 6pm
+    print "Perfect evening weather"
 
-if all of a, b, c are not null:
-    print "All values present"
-
-if any of x, y, z are above 100:
-    print "High value detected"
-
-// English operators
-if score is between 80 and 90:
-    print "Good score"
-
-if filename ends_with ".ov":
-    print "Oviya source file"
+// Multiple conditions
+if all of username, password, email are not null
+    create_account(username, password, email)
 ```
 
-### Loops
+### Loops 
 
 ```oviya
-// Numeric loop
-for 5 i:
+// Numeric for loop
+for 5 i
     print i  // Prints 1, 2, 3, 4, 5
 
+// Range-based loops
+for 1..10 i
+    print "Number: {i}"
+
 // Collection iteration
-numbers = [1, 2, 3, 4, 5]
-for numbers item:
-    print item
+fruits = ["apple", "banana", "cherry"]
+for fruits fruit
+    print "I like {fruit}"
 
-// With condition
-for numbers item:
-    if item > 3:
-        break
-    print item
+// Dictionary iteration
+person = {name: "Alice", age: 30}
+for person key, value
+    print "{key}: {value}"
 ```
 
-### First-Class Control Structures
+### `when` keyword
 
 ```oviya
-// Assign control structures to variables
-loop = for numbers item:
-    print item
+// when key word
+// Keep watching a variable and executes the body upon condition met
+// when is active only on the block it was declared
+// goes out of scope when the declared body goes out of scope
 
-condition = if temperature > 25:
-    print "Warm"
-
-// Activate later
-loop:      // Execute the loop
-condition: // Execute the condition
+// Basic when statement
+x = 5
+when x > 90
+  print "🔥 CPU overheating!",
 ```
 
-## Collections
-
-### Lists (1-indexed)
+### Parallel Processing 
 
 ```oviya
-// List creation and access
-numbers = [1, 2, 3, 4, 5]
-print numbers[1]  // Prints 1 (first element)
-print numbers[5]  // Prints 5 (last element)
+// Background function execution
+func slow_task(name)
+    sleep(2000)  // 2 seconds
+    print "Task {name} completed"
 
-// List modification
-numbers[2] = 10   // Replace second element
-print numbers     // [1, 10, 3, 4, 5]
+// Non-blocking calls
+~slow_task("A")
+    // This body will run after successful completion
+    print "Reached here After A is completed"
+~slow_task("B") 
+~slow_task("C")
+
+// Parallel loops
+urls = ["http://api1.com", "http://api2.com", "http://api3.com"]
+
+// Sequential processing
+for urls url
+    ~fetch_data(url)  // Each call is non-blocking
+
+// Parallel loop (waits for all to complete)
+~for urls url
+    fetch_data(url)
 ```
 
-### Sets (Ordered and Unique)
+### Time and Date Arithmetic 
 
 ```oviya
-// Set creation
-unique_numbers = {1, 2, 3, 2, 1}  // Results in {1, 2, 3}
-mixed_set = {1, 2, null}
-
-// Set operations
-unique_numbers.add(4)
-unique_numbers.remove(1)
-```
-
-### Maps (Insertion-Ordered)
-
-```oviya
-// Map creation and modification
-person = {
-    "name": "Alice",
-    "age": 30,
-    "city": "Sydney"
-}
-
-// Dynamic addition
-person["email"] = "alice@example.com"
-person[4] = "fourth_item"
-
-// Access
-print person["name"]  // "Alice"
-print person[4]       // "fourth_item"
-```
-
-## Time and Dates
-
-Oviya provides intuitive time handling with natural language keywords:
-Oviya provides intuitive time handling with natural language keywords:
-
-### Time Keywords
-- `now` - Current timestamp
-- `day`, `days` - Day units
-- `hour`, `hours` - Hour units
-- `minute`, `minutes` - Minute units
-- `second`, `seconds` - Second units
-- `week`, `weeks` - Week units
-- `month`, `months` - Month units
-- `year`, `years` - Year units
-- `decade`, `decades` - Decade units
-- `century`, `centuries` - Century units
-
-### Time Operations
-
-```oviya
-// Time calculations
+// Time arithmetic
 deadline = now + 3days
-meeting_time = now + 2hours + 30minutes
-project_end = now + 6months
+meeting = 2hours from deadline
+reminder = 30minutes before meeting
+
+// Duration calculations  
+project_start = now
+project_end = 6months after project_start
+sprint_duration = 2weeks
 
 // Time comparisons
-if deadline is before now:
-    print "Deadline passed"
-
-if meeting_time is after 6pm:
-    print "Evening meeting"
-
-// Complex time logic
-if time is after 9am and time is before 5pm:
-    print "Business hours"
+if current_time is after deadline
+    print "Project is overdue!"
+    
+if meeting_time is between 9am and 5pm
+    print "Business hours meeting"
 ```
 
-## Method Chaining
-
-The pipeline operator (`->`) enables powerful method chaining:
-
-### Basic Chaining
+### Arrays
 
 ```oviya
-// String processing pipeline
-input = "  apple, banana  ,  cherry  "
-result = input -> trim -> lower -> split(",") -> map(trim)
-// Result: ["apple", "banana", "cherry"]
 
-// Numeric processing
-numbers = [1, 5, 3, 8, 2]
-processed = numbers -> filter(> 3) -> sort -> map(* 2)
-// Result: [10, 16] (filtered > 3, sorted, then doubled)
+//  Array notations
+L = [1,2,3,4,5,6,7,8,9,10] // indexes start with 1
+
+// Access array element
+L[1] // returns 1
+L[-1] // Returns 10
+
+// Alternate notation to access element
+(L)1 // returns 1
+(L)-1 // returns 10
+(L)5 //returns 5
+
+// Use the mathematical notation if integer literal is available
+X = [1,2,3,5]
+print X1, X2 // prints 1,2
+
+// Arrays can be splitted with a division operators
+
+L/2 // returns [[1,2,3,4,5],[6,7,8,9,10]]
+
+// The (paren)n notation would be useful in below situation
+
+first_half = (L/2)1 // Returns [1,2,3,4,5], same as (L/2)[1]
+first_third = (L/3)[1] // Returns [1,2,3] since L/3 = [[1,2,3],[4,5,6],[7,8,9],[10]]
+
+
+// Array slicing
+// L:start:end:step_function // Indices are inclusive
+L:: // Returns L
+
+// Array Slicing (inclusive, 1-based)
+
+L = [1,2,3,4,5,6,7,8,9,10]
+
+L::         // → [1,2,3,4,5,6,7,8,9,10]
+L:1:5       // → [1,2,3,4,5]
+L::5        // → [1,2,3,4,5]
+L:8         // → [8,9,10]
+L:8:10      // → [8,9,10]
+
+
+I = [  1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+J = [-10,-9,-8,-7,-6,-5,-4,-3,-2, -1]
+L = [  1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// Negative indices are supported
+L:-3:       // last 3 elements, [8,9,10]
+L:-3:-1     // [8,9,10]
+
+// L:start:end
+
+//start..end are just interval,,, they are mathematical
+// For ascending sequence increment 1 and descending decrement by 1 are automically supplied step function
+
+// 10..1 is a valid sequence, which essentially reverses the list
+L:10:1 //  [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+L:1:10:+2      // → [1,3,5,7,9]
+L:10:1:-3      // → [10,7,4,1]
+L:::^2      // → [1,4,9]
+
+// Slices are first class
+s1 = 1:5
+s2 = 1:10:2
+
+// Apply the slice like below
+L:s1 // [1,2,3,4,5]
+L:s2 // [1,3,5,7,9]
+
+// Slicing also supports filtering
+L:start:end:step_function:filter
+
+// Slicing also supports mapping
+L:start:end:step_function:filter_function:map_funtion
+
+s3 = 1:10::is_prime:*2
+L:s3 // [1,4,9,25,49]
+
+```
+
+### String Interpolation
+```
+// Literal strings (single quotes - no interpolation)
+literal = 'Variables like {name} are not expanded here'
+```
+
+### Angle Bracket Functions
+
+```oviya
+// Predicate functions with natural language
+// Must always return boolean and usually used in if, when, while
+
+<very_high>(temp) = temp > 90
+needs_review(comment) = comment contains "TODO"
+
+// Usage in conditions
+if temperature very_high
+    print "Overheating!"
+    
+if comment needs_review
+    print "Needs attention"
+
+// Combining predicates
+<concerning> = $ <very_high> or $ <urgent>
+if temperature is not <concerning>
+   print "OK"
+```
+
+### Autovivification 
+
+```oviya
+// Automatic creation of nested structures
+config = {}
+config["database"]["host"] = "localhost"
+config["database"]["port"] = 5432
+config["cache"]["redis"]["url"] = "redis://localhost"
+
+print config
+// Output:
+// {
+//   database: {host: "localhost", port: 5432},
+//   cache: {redis: {url: "redis://localhost"}}
+// }
+
+// Array autofill
+list = [1, 2, 3]
+list[10] = "hello"  // Fills indices 4-9 with null
+print list  // [1, 2, 3, null, null, null, null, null, null, "hello"] //null values don't cost memory
+```
+
+### Closures and Decorators 
+
+```oviya
+// Builtin suppport for closures
+
+func counter()
+    count = 0
+    func inc()
+        count++
+        return count
+    return inc
+
+c = counter()
+print c() // 1
+print c() // 2
+
+// Decorators are allowed syntax
+func log(f)
+    func inner(x)
+        print "calling with", x
+        return f(x)
+    return inner
+
+@log square(x) = x^2
+square(4) // logs and returns 16
+
+// Decorators can be chained
+@memoise @log square(x) = x^2
+```
+### Rate Expressions (per)
+
+```
+// Oviya allows natural expressions using `per` keyword:
+// e.g., 5000 per month, 40 km per hour, 25 items per box
+
+// These are converted internally to: rate(value, unit)
+
+// Units are first-class and composable:
+// e.g., km/hour, dollars/month, people/km^2
+
+salary = 5000 per month
+speed = 100 km per hour
+cost = 5 usd per kg
+
+print salary * 12  // 60000 per year
+print 200 km / speed  // → 2 hours
+
 ```
 
 ### Advanced Filtering
@@ -406,13 +722,12 @@ result = data
     -> filter( sort
 ```
 
-## Reactive Programming
-
 ### Reactive Assignments
 
-Reactive assignments automatically update when dependencies change:
-
 ```oviya
+// Reactive assignments automatically update when dependencies change:
+
+
 // Basic reactive assignment
 price = 100
 tax_rate = 0.18
@@ -434,58 +749,6 @@ net_income => gross_income - (gross_income * tax_rate)
 
 print net_income  // Updates when any dependency changes
 ```
-
-### Watch Expressions
-
-Monitor variable changes and execute code when conditions are met:
-
-```oviya
-// Basic watch
-x = 5
-when x  100:
-    print "x is very high"
-when x  90: print "🔥 CPU overload",
-    "memory": when memory_usage > 80: print "💾 Memory warning",
-    "disk": when disk_usage > 95: print "💽 Disk full"
-}
-
-// Control individual watches
-pause alerts["cpu"]
-resume alerts["memory"]
-cancel alerts["disk"]
-
-// Add new watches dynamically
-alerts["network"] = when network_latency > 1000:
-    print "🌐 Network slow"
-```
-
-## Background Processing
-
-Execute functions asynchronously with the `~` operator:
-
-```oviya
-// Synchronous function call
-func process_data(data):
-    // Time-consuming operation
-    return analyzed_data
-
-result = process_data(large_dataset)  // Blocks execution
-
-// Asynchronous function call
-~process_data(large_dataset)  // Non-blocking
-
-// Batch async processing
-urls = [
-    "https://api1.com/data",
-    "https://api2.com/data", 
-    "https://api3.com/data"
-]
-
-for urls url:
-    ~fetch_data(url)  // All requests run in parallel
-```
-
-## Advanced Features
 
 ### String Formatting
 
@@ -516,193 +779,87 @@ Status: {status}
 literal_braces = "Literal braces: {{name}}"  // Output: Literal braces: {name}
 ```
 
-### State Debugging
-
-```oviya
-// Debug variable states
-x = 42
-y = 17
-
-state x        // Output: the value of x = 42
-state x, y     // Output: the value of x = 42, y = 17
-
-// Useful in complex algorithms
-func complex_algorithm(data):
-    processed = data -> transform
-    state processed
-    
-    result = processed -> analyze
-    state result
-    
-    return result
-```
-
-### Natural Language Functions
-
-```oviya
-// Define phrase functions
-(priority) = priority starts_with "!!!"
-(task) = task contains "ASAP" or task contains "urgent"
-(deadline) = deadline is before now
-
-// Usage in conditions
-if task is urgent:
-    print "🚨 Immediate attention required"
-
-if deadline is overdue:
-    print "⚠️ Past due date"
-
-// Combine conditions
-if task is high_priority and not deadline is overdue:
-    print "✅ Priority task on schedule"
-```
-
 ## Examples
 
-### Complete Application Example
+### Data Processing Pipeline 
 
 ```oviya
-// task_manager.ov - Simple task management system
+// Process CSV-like data
+raw_data = """
+  John Doe, 30, Engineer  
+  Jane Smith, 25, Designer
+  Bob Johnson, 35, Manager  
+"""
 
-// Task data structure
-tasks = []
-
-// Task priority functions
-(task) = task["priority"] = "high" and task["due"] is before now + 1day
-(task) = task["due"] is before now
-(task) = task["status"] = "done"
-
-// Create new task
-func create_task(title, priority, due_date):
-    task = {
-        "id": tasks.length + 1,
-        "title": title,
-        "priority": priority,
-        "due": due_date,
-        "status": "pending",
-        "created": now
-    }
-    tasks.append(task)
-    return task
-
-// Get filtered tasks
-get_urgent_tasks() = tasks.filter(urgent)
-get_overdue_tasks() = tasks.filter(overdue)
-get_pending_tasks() = tasks.filter(not completed)
-
-// Task statistics (reactive)
-total_tasks => tasks.length
-pending_count => get_pending_tasks().length
-urgent_count => get_urgent_tasks().length
-overdue_count => get_overdue_tasks().length
-
-// Monitoring
-when urgent_count > 5:
-    print "🚨 Too many urgent tasks: {urgent_count}"
-
-when overdue_count > 0:
-    print "⚠️ {overdue_count} overdue tasks need attention"
-
-// Sample usage
-create_task("Complete documentation", "high", now + 2days)
-create_task("Review code", "medium", now + 1week)
-create_task("Fix critical bug", "high", now + 6hours)
-
-// Display statistics
-print "Task Summary:"
-print "Total: {total_tasks}"
-print "Pending: {pending_count}"
-print "Urgent: {urgent_count}"
-print "Overdue: {overdue_count}"
-
-// Process urgent tasks
-urgent_tasks = get_urgent_tasks()
-for urgent_tasks task:
-    print "🔥 URGENT: {task['title']} (due: {task['due']})"
-```
-
-### Data Processing Pipeline
-
-```oviya
-// data_analysis.ov - Process and analyze data
-
-// Sample dataset
-sales_data = [
-    {"product": "Laptop", "price": 1200, "quantity": 5, "date": now - 1day},
-    {"product": "Mouse", "price": 25, "quantity": 20, "date": now - 2days},
-    {"product": "Monitor", "price": 300, "quantity": 8, "date": now - 1day},
-    {"product": "Keyboard", "price": 75, "quantity": 15, "date": now - 3days}
-]
-
-// Processing functions
-calculate_revenue(sale) = sale["price"] * sale["quantity"]
-is_recent(sale) = sale["date"] is after now - 2days
-is_high_value(sale) = sale["price"] > 100
-
-// Reactive analytics
-total_revenue => sales_data
-    -> map(calculate_revenue)
-    -> sum
-
-recent_sales => sales_data
-    -> filter(is_recent)
-    -> length
-
-high_value_revenue => sales_data
-    -> filter(is_high_value)
-    -> map(calculate_revenue)
-    -> sum
-
-// Real-time monitoring
-when total_revenue > 10000:
-    print "🎉 Revenue target exceeded: ${total_revenue}"
-
-when recent_sales > 10:
-    print "📈 High sales activity: {recent_sales} recent sales"
-
-// Async reporting
-~generate_detailed_report(sales_data)
-~send_daily_summary(total_revenue, recent_sales)
-
-// Display results
-print "Sales Analytics:"
-print "Total Revenue: ${total_revenue}"
-print "Recent Sales: {recent_sales}"
-print "High-Value Revenue: ${high_value_revenue}"
-
-// Top products by revenue
-top_products = sales_data
-    -> map(λ sale: {
-        "product": sale["product"],
-        "revenue": calculate_revenue(sale)
+processed = raw_data
+    -> split("\n")
+    -> map(trim)
+    -> filter(len > 0)
+    -> map(split(","))
+    -> map(map(trim))
+    -> map({
+        name: $[1],
+        age: int($[2]), 
+        role: $[3]
     })
-    -> sort_by("revenue", descending: true)
-    -> take(3)
 
-print "\nTop Products:"
-for top_products product:
-    print "{product['product']}: ${product['revenue']}"
+for processed p
+    print "{p.name} ({p.age}) - {p.role}"
+    
+// Inside functional contexts (like map, filter), object literals are auto-wrapped into lambda functions
+// The symbol `$` refers to the input element
+
+map({
+    name: $[1],
+    age: int($[2]),
+    role: $[3]
+})
+
+// is equivalent to
+
+map(func f(x)
+ return {
+    name: x[1],
+    age: int(x[2]),
+    role: x[3]
+})
 ```
 
+## Glossary
 
-### Development Setup
+- `$` — default parameter inside lambdas and inline functions  
+- `->` — pipe operator: passes output of one function into the next  
+- `=>` — reactive assignment: updates automatically when dependencies change  
+- `<predicate>` — natural-language-style boolean function  
+- `~` — non-blocking / background execution  
+- `when` — reactive trigger block that runs on condition or change  
+
+## Get Started
+
+Oviya is a compiled language that compiles to C. The compiler itself is written in Go for performance and portability.
+
+To get started:
 
 ```bash
 # Clone the repository
-git clone https://github.com/n3h3m/oviya.git
-cd oviya
+git clone https://github.com/n3h3m/Oviya.git
 
-# Install dependencies
-go mod download
+# Navigate to the project directory
+cd Oviya
 
-# Run tests
-go test ./...
+# Build the Oviya compiler (requires Go)
+go build -o oviya ./cmd/oviya
 
-# Build development version
-go build -o oviya-dev cmd/main.go
+# Compile your .ov file to C and build it
+./oviya build examples/hello.ov
+
+# Run the compiled binary
+./hello
+
 ```
-
----
 
 **Maintainers**: Nehemiah Jacob
 **Repository**: [github.com/n3h3m/oviya](https://github.com/n3h3m/oviya)
+
+[![](https://img.shields.io/badge/Made_with-Go-informational?style=flat)](https://golang.org)
+****
