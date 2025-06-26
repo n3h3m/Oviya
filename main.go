@@ -29,6 +29,7 @@ func main() {
         if strings.HasPrefix(line, "print ") {
             str := strings.TrimPrefix(line, "print ")
             str = strings.Trim(str, "\"")
+            str = strings.Trim(str, "'")
             cCode += fmt.Sprintf("    printf(\"%s\\n\");\n", str)
         }
     }

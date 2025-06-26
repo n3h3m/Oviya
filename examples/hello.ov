@@ -1,3 +1,8 @@
 print "Hello, world!"
 print "Nehemiah!"
 print 'Hello!'
+
+// Must print
+//Hello, world!
+//Nehemiah!
+//'Hello!'
