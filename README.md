@@ -53,7 +53,7 @@ print "Square of 7: {square(7)}"
 
 // Method chaining
 data = "  apple, banana, cherry  "
-cleaned = data -> split(",") -> map(trim)
+cleaned = data -> split(",") -> trim
 print cleaned  // ["apple", "banana", "cherry"]
 ```
 
@@ -112,9 +112,9 @@ print f(10)    // 9
 // In that scenario, Use `$1`, `$2`, `$3`, etc. for positional arguments in anonymous functions.
 //
 // Examples:
-add = $1 + $2         // same as: func(a, b): return a + b
-power = $1 ^ $2       // same as: func(base, exp): return base ^ exp
-max = $1 > $2 : $1 : $2 // ternary operator cond:true_value:false_value
+add() = $1 + $2         // same as: func(a, b): return a + b
+power() = $1 ^ $2       // same as: func(base, exp): return base ^ exp
+max() = $1 > $2 : $1 : $2 // ternary operator cond:true_value:false_value
 
 print add(3, 5)       // 8
 print power(2, 3)     // 8
@@ -139,6 +139,9 @@ const POPULATION = 7,800,000,000
 // Mathematical expressions
 z = 10x + y    // Multiplication without explicit operator
 const tau = 2pi // Using pi constant
+
+// The below style function declaration is perfectly valid
+f(x) = 2sin(x)
 ```
 
 ## Data Types
@@ -148,7 +151,7 @@ Oviya supports a rich set of built-in data types:
     `null`, `bool`, `str`,
     `int`,  `ratio`, `real`, `complex`, `quat` ,
     `ts`, // timestamp
-    `list`, `set`, `dict` ,
+    `list`, `set`, `obj` ,
     `inter`, `seq`, `func`, // interval, sequence (generators)
     `url`, `email`, `err`
 
@@ -200,9 +203,9 @@ person["occupation"] = "Developer"
 
 ```oviya
 // Complex numbers
-z1 = 2 + 3i
-z2 = 1 - 4i
-result = z1 * z2
+z_1 = 2 + 3i
+z_2 = 1 - 4i
+result = z_1 * z_2
 
 // Quaternions
 q = 1 + 2i + 3j + 4k
@@ -214,6 +217,19 @@ print q.k  // k component: 4
 // Alternative notation when i,j,k are already taken ariables
 z = 2 + 3i_
 q = 1 + 2i_ + 3j_ + 4k_
+
+// Polar, spherical, cylindrical cordinate
+p = @5, pi/2
+print p.r       // 5
+print p.t       // or p.theta
+
+s = @@3, 2, pi
+print s.p       // 2
+
+c = @@@4, π/4, 10
+print c.r       // 4 // rho
+print c.z       // 10
+
 ```
 
 ## Functions
@@ -222,9 +238,6 @@ q = 1 + 2i_ + 3j_ + 4k_
 
 ```oviya
 // Below ways to define functions
-
-func f(n)
-    print x
 
 twice() = 2$ //$ stands for default arguement
 
@@ -599,6 +612,17 @@ L:start:end:step_function:filter_function:map_funtion
 s3 = 1:10::is_prime:*2
 L:s3 // [1,4,9,25,49]
 
+// Implicit array construction
+// Declaring the 2 variables will inevitably construct a point array
+p1 = 1,2
+p2 = 8,4 
+
+// Equals to
+p = [[1,2],[8,4]]
+
+// The above is to keep the spirit that any array can be accessed as a integer followed. 
+// That would mean declaring a variable like `x1` would create an array `x` and will assign that value as the first item in that list
+
 ```
 
 ### String Interpolation
@@ -674,11 +698,11 @@ func log(f)
         return f(x)
     return inner
 
-@log square(x) = x^2
+#log square(x) = x^2
 square(4) // logs and returns 16
 
 // Decorators can be chained
-@memoise @log square(x) = x^2
+#memoise #log square(x) = x^2
 ```
 ### Rate Expressions (per)
 
